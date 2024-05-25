@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <!-- CSS библиотеки Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <!-- JS библиотеки Swiper -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <meta charset="UTF-8">
+    <title>MY SITE</title>
+    <meta name="description" content="Описание страницы" />
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            padding: 10px 0;
+            text-align: center;
+            width: 100%; /* Ширина шапки на всю длину страницы */
+            position: fixed; /* Зафиксируем шапку */
+            top: 0; /* Шапка будет прижата к верху страницы */
+            z-index: 999; /* Устанавливаем индекс слоя, чтобы шапка была поверх остального контента */
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover {
+            background-color: #fff;
+            color: #222;
+        }
+        main {
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            background-color: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 5px; /* Закругление углов кнопки */
+            margin-right: 10px; /* Расстояние между кнопками */
+        }
+        button:hover {
+            background-color: #fff;
+            color: #222;
+        }
+        .swiper-container {
+            max-width: 90%; /* Установка максимальной ширины для контейнера графиков */
+            margin: 0 auto; /* Центрирование контейнера графиков */
+        }
+        section {
+            margin-top: 150px; /* Отступ сверху для надписи "какие-то графики ХЗ" и всего содержимого ниже */
+            margin-bottom: 65px;
+        }
+        .swiper-slide section {
+            margin: 0 20%; /* Отступы с боков для каждого графика на 20% */
+            margin-bottom: 30px; /* Отступ от нижней части графика до виджета TradingView */
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <button onclick="window.location.href='data.html'">Данные</button>
+        <button onclick="window.location.href='comparison.html'">Сравнения</button>
+        <button onclick="window.location.href='charts.html'">Графики</button>
+    </nav>
+</header>
+<main>
+    <section>
+        <h1>Общие графики</h1>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <section>
+                        <h1>Динамика продаж автомобилей в мире по годам (млн. шт.)</h1>
+                        <canvas id="myChart1"></canvas>
+                    </section>
+                </div>
+                <div class="swiper-slide">
+                    <section>
+                        <h1>Страны лидеры по продажам легковых автомобилей в 2023 году</h1>
+                        <canvas id="myChart2"></canvas>
+                    </section>
+                </div>
+                <div class="swiper-slide">
+                    <section>
+                        <h1>Динамика продаж автомобилей в странах лидерах и России (млн.шт.)</h1>
+                        <canvas id="myChart3"></canvas>
+                    </section>
+                </div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </section>
+
+    <script>
+        // Данные для графика 1
+        var data1 = {
+            labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+            datasets: [{
+                label: 'График 1',
+                data: [80, 82, 84, 87, 92, 96, 93, 91, 77, 80, 78],
+                backgroundColor: 'rgba(240, 93, 225, 0.7)'
+            }]
+        };
+
+        // Настройки для графика 1
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        // Создаем график 1
+        var ctx1 = document.getElementById('myChart1').getContext('2d');
+        var myChart1 = new Chart(ctx1, {
+            type: 'bar',
+            data: data1,
+            options: options
+        });
+
+        // Данные для графика 2
+        var data2 = {
+            labels: ['Китай', 'США', 'Евросоюз', 'Япония', 'Индия', 'Германия', 'Великобритания', 'Бразилия', 'Франция', 'Корея', 'Италия'],
+            datasets: [{
+                label: 'График 2',
+                data: [22.6, 15.6, 11, 4.85, 4, 2.8, 1.9, 1.86, 1.79, 1.77, 1.69],
+                backgroundColor: 'rgba(157, 93, 240, 0.8)'
+            }]
+        };
+
+        // Создаем график 2
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var myChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: data2,
+            options: options
+        });
+
+        // Данные для графика 3
+        var data = {
+            labels: ['2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'], // Года с 2008 по 2022
+            datasets: [
+                {
+                    label: 'Китай',
+                    data: [8, 10, 14, 15, 15, 17, 20, 22, 23, 25, 23, 21, 20, 21, 24],
+                    borderColor: 'rgba(255, 99, 132, 1)', // Цвет линии
+                    borderWidth: 2 // Ширина линии
+                },
+                {
+                    label: 'США',
+                    data: [14, 10, 11, 13, 15, 16, 17, 18, 17, 17, 17, 17, 15, 15, 14], 
+                    borderColor: 'rgba(54, 162, 235, 1)', // Цвет линии
+                    borderWidth: 2 // Ширина линии
+                },
+                {
+                    label: 'Евросоюз',
+                    data: [15, 15, 14, 13, 12, 12, 13, 14, 15, 15, 15, 16, 10, 10, 10], 
+                    borderColor: 'rgba(255, 206, 86, 1)', // Цвет линии
+                    borderWidth: 2 // Ширина линии
+                },
+                {
+                    label: 'Россия',
+                    data: [3.5, 1, 1.5, 2, 2, 2, 2, 1.5, 1, 1.5, 2, 1.5, 1.5, 1.5, 0.5], 
+                    borderColor: 'rgba(75, 192, 192, 1)', // Цвет линии
+                    borderWidth: 2 // Ширина линии
+                },
+            ]
+        };
+
+        // Создаем график
+        var ctx = document.getElementById('myChart3').getContext('2d');
+        var myChart3 = new Chart(ctx, {
+            type: 'line', // Используем линейный тип графика
+            data: data,
+            options: {
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Годы'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Млн. авто'
+                        },
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return value + ' млн';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Инициализируем слайдер
+        var swiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
+</main>
+
+<!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <div class="tradingview-widget-copyright">
+        <a href="https://ru.tradingview.com/" rel="noopener nofollow" target="_blank">
+            <span class="blue-text">Все рынки на TradingView</span>
+        </a>
+    </div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {
+            "symbols": [
+                {
+                    "proName": "FOREXCOM:SPXUSD",
+                    "title": "S&P 500"
+                },
+                {
+                    "proName": "FOREXCOM:NSXUSD",
+                    "title": "US 100"
+                },
+                {
+                    "proName": "FX_IDC:EURUSD",
+                    "title": "EUR/USD"
+                },
+                {
+                    "proName": "BITSTAMP:BTCUSD",
+                    "title": "Биткоин"
+                },
+                {
+                    "proName": "BITSTAMP:ETHUSD",
+                    "title": "Эфириум"
+                }
+            ],
+            "showSymbolLogo": true,
+            "isTransparent": false,
+            "displayMode": "adaptive",
+            "colorTheme": "dark",
+            "locale": "ru"
+        }
+    </script>
+</div>
+<!-- TradingView Widget END -->
+
+<footer>
+    
+</footer>
+</body>
+</html>

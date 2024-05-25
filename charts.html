@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Графики</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        label, select {
+            color: #fff;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        select {
+            background-color: #333;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            padding: 8px;
+            color: #fff;
+        }
+
+        #chartContainer {
+            margin: 120px auto 0;
+            max-width: 80%;
+            max-height: 80vh;
+            text-align: center;
+        }
+
+        canvas {
+            border: 1px solid #fff;
+            border-radius: 5px;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        input[type="submit"] {
+            background-color: transparent;
+            border: 2px solid #fff;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Графики</h1>
+    <form id="chartForm">
+        <label for="company">Выберите компанию:</label>
+        <select id="company" name="company">
+            <option value="Tesla">Tesla</option>
+            <option value="Ford">Ford</option>
+            <option value="Toyota">Toyota</option>
+            <option value="VG">VG</option>
+            <option value="GM">GM</option>
+            <option value="GEELY">GEELY</option>
+            <option value="NIO">NIO</option>
+        </select>
+        <label for="metric">Выберите метрику:</label>
+        <select id="metric" name="metric">
+            <option value="Выручка">Выручка</option>
+            <option value="Прибыль">Прибыль</option>
+            <option value="Капитализация">Капитализация</option>
+            <option value="p/e">p/e</option>
+            <option value="Регрессия">Регрессия</option>
+            <option value="Пузырьковый">Пузырьковый</option>
+            <option value="Тепловая карта">Тепловая карта</option>
+            <option value="Спектральный">Спектральный</option>
+            <option value="Риск и Доходность">Риск и Доходность</option>
+        </select>
+        <br>
+        <input type="submit" value="Показать график">
+    </form>
+    <div id="chartContainer">
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        var companyData = {
+            Tesla: {
+                Выручка: [7.0, 11.7, 21.5, 24.5, 31.5, 53.8, 81.5, 95.9],
+                Прибыль: [-0.67, -1.96, -0.97, -0.87, -0.69, 5.52, 12.58, 10.79],
+                Капитализация: [36.1, 57.3, 52.7, 113.23, 763.57, 1061.35, 389.68, 789.84],
+                "p/e": [-53.6, -29.2, -53.9, -95.8, 913.1, 188.6, 30.6, 52.6],
+                Пузырьковый: [
+                    { x: 7.0, y: -0.67, r: 36.1 },
+                    { x: 11.7, y: -1.96, r: 57.3 },
+                    { x: 21.5, y: -0.97, r: 52.7 },
+                    { x: 24.5, y: -0.87, r: 113.23 }
+                ],
+                "Тепловая карта": [
+                    [1.0, 0.8, 0.6, -0.2, -0.4],
+                    [0.8, 1.0, 0.7, -0.3, -0.5],
+                    [0.6, 0.7, 1.0, -0.1, -0.3],
+                    [-0.2, -0.3, -0.1, 1.0, 0.9],
+                    [-0.4, -0.5, -0.3, 0.9, 1.0]
+                ],
+                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
+                "Риск и Доходность": [
+                    { x: 10, y: 5 },
+                    { x: 15, y: 7 },
+                    { x: 20, y: 8 },
+                    { x: 25, y: 9 },
+                    { x: 30, y: 12 }
+                ]
+            },
+            Ford: {
+                Выручка: [151.80, 156.78, 160.34, 155.90, 127.14, 136.34, 158.06, 174.23],
+                Прибыль: [4.60, 7.73, 3.68, 0.05, -1.28, 17.94, -1.98, 6.16],
+                Капитализация: [48.20, 49.61, 31.14, 37.96, 34.97, 83.00, 46.75, 48.79],
+                "p/e": [10.7, 4.61, 8.46, 439.8, -27.4, 4.62, -21.7, 11.2],
+                Пузырьковый: [
+                     { x: 127.14, y: -1.28, r: 34.97 },
+                    { x: 136.34, y: 17.94, r: 83.00 },
+                    { x: 158.06, y: -1.98, r: 46.75 },
+                    { x: 174.23, y: 6.16, r: 48.79 }
+                ],
+                "Тепловая карта": [
+                    [1.0, 0.8, 0.6, -0.2, -0.4],
+                    [0.8, 1.0, 0.7, -0.3, -0.5],
+                    [0.6, 0.7, 1.0, -0.1, -0.3],
+                    [-0.2, -0.3, -0.1, 1.0, 0.9],
+                    [-0.4, -0.5, -0.3, 0.9, 1.0]
+                ],
+                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
+                "Риск и Доходность": [
+                    { x: 10, y: 5 },
+                    { x: 15, y: 7 },
+                    { x: 20, y: 8 },
+                    { x: 25, y: 9 },
+                    { x: 30, y: 12 }
+                ]
+            },
+            Toyota: {
+               Выручка: [255.08, 265.12, 272.55, 274.70, 256.60, 279.24, 274.17, 297.96],
+                Прибыль: [16.91, 22.50, 16.98, 18.73, 21.17, 25.36, 18.09, 27.69],
+                Капитализация: [197.39, 191.03, 165.27, 196.93, 215.71, 252.84, 186.35, 247.48],
+                "p/e": [7.47, 9.7, 8.45, 10.3, 0.0981, 1.12, 9.58, 10.2],
+                Пузырьковый: [
+                   { x: 249.75, y: 14.30, r: 215.23 },
+                    { x: 256.72, y: 24.11, r: 252.23 },
+                    { x: 276.20, y: 23.94, r: 200.00 },
+                    { x: 303.73, y: 22.49, r: 225.00 }
+                ],
+                "Тепловая карта": [
+                    [1.0, 0.8, 0.6, -0.2, -0.4],
+                    [0.8, 1.0, 0.7, -0.3, -0.5],
+                    [0.6, 0.7, 1.0, -0.1, -0.3],
+                    [-0.2, -0.3, -0.1, 1.0, 0.9],
+                    [-0.4, -0.5, -0.3, 0.9, 1.0]
+                ],
+                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
+                "Риск и Доходность": [
+                    { x: 10, y: 5 },
+                    { x: 15, y: 7 },
+                    { x: 20, y: 8 },
+                    { x: 25, y: 9 },
+                    { x: 30, y: 12 }
+                ]
+            },
+            VG: {
+                Выручка: [217.27, 229.55, 235.85, 252.63, 222.88, 250.20, 279.23, 311.34],
+                Прибыль: [5.14, 11.18, 11.83, 13.35, 8.33, 14.84, 14.87, 13.96],
+                Капитализация: [60.5, 80.3, 98.7, 67.5, 86.5, 90.4, 121.3, 75.2],
+                "p/e": [191, 8.3, 5.9, 12.9, 5.45, 3.9, 5.2, 4.6],
+                Пузырьковый: [
+                    { x: 24.55, y: 3.10, r: 140.34 },
+                    { x: 27.30, y: 3.20, r: 145.60 },
+                    { x: 30.15, y: 3.50, r: 150.90 },
+                    { x: 32.48, y: 3.70, r: 155.70 }
+                ],
+                "Тепловая карта": [
+                    [1.0, 0.8, 0.6, -0.2, -0.4],
+                    [0.8, 1.0, 0.7, -0.3, -0.5],
+                    [0.6, 0.7, 1.0, -0.1, -0.3],
+                    [-0.2, -0.3, -0.1, 1.0, 0.9],
+                    [-0.4, -0.5, -0.3, 0.9, 1.0]
+                ],
+                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
+                "Риск и Доходность": [
+                    { x: 10, y: 5 },
+                    { x: 15, y: 7 },
+                    { x: 20, y: 8 },
+                    { x: 25, y: 9 },
+                    { x: 30, y: 12 }
+                ]
+            },
+            GM: {
+                Выручка: [149.18, 145.59, 147.05, 137.24, 122.48, 127.00, 156.74, 171.97],
+                Прибыль: [9.437, 0.04, 8.08, 6.73, 6.43, 10.02, 9.93, 10.02],
+                Капитализация: [53.1, 58.22, 46.83, 51.24, 59.59, 85.12, 47.79, 49.19],
+                "p/e": [5.93, -16.2, 6.88, 7.05, 11.3, 7.64, 5.69, 5.2],
+                Пузырьковый: [
+                    { x: 115.79, y: -0.82, r: 60.00 },
+                    { x: 127.00, y: 7.07, r: 90.00 },
+                    { x: 134.00, y: 9.93, r: 95.00 },
+                    { x: 140.00, y: 8.00, r: 92.00 }
+                ],
+                "Тепловая карта": [
+                    [1.0, 0.8, 0.6, -0.2, -0.4],
+                    [0.8, 1.0, 0.7, -0.3, -0.5],
+                    [0.6, 0.7, 1.0, -0.1, -0.3],
+                    [-0.2, -0.3, -0.1, 1.0, 0.9],
+                    [-0.4, -0.5, -0.3, 0.9, 1.0]
+                ],
+                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
+                "Риск и Доходность": [
+                    { x: 10, y: 5 },
+                    { x: 15, y: 7 },
+                    { x: 20, y: 8 },
+                    { x: 25, y: 9 },
+                    { x: 30, y: 12 }
+                ]
+            }, 
+            GEELY: {
+                Выручка: [62.77, 106.96, 126.26, 110.44, 103.51, 122.46, 172.06, 183.51],
+                Прибыль: [5.97, 12.26, 14.87, 9.29, 6.06, 5.69, 5.96, 5.78],
+                Капитализация: [98.52, 112.32, 105.82, 114.21, 126.72, 273.61, 192.12, 108.5],
+                "p/e": [88.7, 148.2, 63.8, 118.9, 248.8, 276.8, 154.2, 147.2],
+                Пузырьковый: [
+                     { x: 16.7, y: 1.8, r: 12.0 },
+                    { x: 19.3, y: 2.0, r: 12.5 },
+                    { x: 21.2, y: 2.1, r: 13.0 },
+                    { x: 22.0, y: 2.2, r: 13.5 }
+                ],
+                "Тепловая карта": [
+                    [1.0, 0.8, 0.6, -0.2, -0.4],
+                    [0.8, 1.0, 0.7, -0.3, -0.5],
+                    [0.6, 0.7, 1.0, -0.1, -0.3],
+                    [-0.2, -0.3, -0.1, 1.0, 0.9],
+                    [-0.4, -0.5, -0.3, 0.9, 1.0]
+                ],
+                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
+                "Риск и Доходность": [
+                    { x: 10, y: 5 },
+                    { x: 15, y: 7 },
+                    { x: 20, y: 8 },
+                    { x: 25, y: 9 },
+                    { x: 30, y: 12 }
+                ]
+            }, 
+            NIO: {
+               Выручка: [0.44, 0.71, 0.75, 1.13, 2.36, 5.60, 7.32, 7.70],
+                Прибыль: [-0.38, -0.74, -1.46, -1.65, -0.81, 1.64, 2.16, 3.03],
+                Капитализация: [0.1, 0.2, 4.0, 54.23, 36.57, 17.35, 13.68, 9.84],
+                "p/e": [0, -0.0467, -0.329, -0.373, -10.2, -8.94, -30.2, -27.1],
+                Пузырьковый: [
+                    { x: 2.36, y: -0.81, r: 36.57 },
+                    { x: 5.60, y: 1.64, r: 17.35 },
+                    { x: 7.32, y: 2.16, r: 13.68 },
+                    { x: 7.70, y: 3.03, r: 9.84 }
+                ],
+                "Тепловая карта": [    
+                    [1.0, 0.8, 0.6, -0.2, -0.4],
+                    [0.8, 1.0, 0.7, -0.3, -0.5],
+                    [0.6, 0.7, 1.0, -0.1, -0.3],
+                    [-0.2, -0.3, -0.1, 1.0, 0.9],
+                    [-0.4, -0.5, -0.3, 0.9, 1.0]
+                ],
+                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
+                "Риск и Доходность": [
+                    { x: 10, y: 5 },
+                    { x: 15, y: 7 },
+                    { x: 20, y: 8 },
+                    { x: 25, y: 9 },
+                    { x: 30, y: 12 }
+                ]
+            } 
+            // Добавить остальные компании аналогичным образом
+        };
+
+        document.getElementById('chartForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var company = document.getElementById('company').value;
+            var metric = document.getElementById('metric').value;
+            var data = companyData[company][metric];
+            var chartType;
+
+            // Очистка предыдущего графика
+            var chartContainer = document.getElementById('chartContainer');
+            chartContainer.innerHTML = '<canvas id="myChart" width="400" height="400"></canvas>';
+
+            // Отображение графика
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            if (metric === 'Регрессия') {
+                // Пример для графика регрессии
+                var revenue = companyData[company]['Выручка'];
+                var capitalization = companyData[company]['Капитализация'];
+                var regression = calculateRegression(capitalization, revenue);
+                var regressionLine = capitalization.map(function(x) { return regression.slope * x + regression.intercept; });
+
+                new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            {
+                                label: company + ' - Регрессия',
+                                data: capitalization.map(function(x, i) { return { x: x, y: revenue[i] }; }),
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1,
+                                showLine: false
+                            },
+                            {
+                                label: 'Regression Line',
+                                data: capitalization.map(function(x, i) { return { x: x, y: regressionLine[i] }; }),
+                                type: 'line',
+                                fill: false,
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Капитализация'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Выручка'
+                                }
+                            }
+                        }
+                    }
+                });
+            } else if (metric === 'Пузырьковый') {
+                // Пример для пузырькового графика
+                new Chart(ctx, {
+                    type: 'bubble',
+                    data: {
+                        datasets: [{
+                            label: company + ' - Пузырьковый',
+                            data: data,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom'
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else if (metric === 'Тепловая карта') {
+    // Создание тепловой карты
+            var myChart = new Chart(ctx, {
+                type: 'heatmap',
+                data: {
+                    datasets: [{
+                        data: data,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'X Label'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Y Label'
+                            }
+                        }
+                    }
+                }
+            });
+                
+        } else if (metric === 'Спектральный') {
+                // Пример для спектрального графика
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
+                        datasets: [{
+                            label: company + ' - Спектральный',
+                            data: data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else if (metric === 'Риск и Доходность') {
+                // Пример для графика риска и доходности
+                new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: company + ' - Риск и Доходность',
+                            data: data,
+                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'Риск'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Доходность'
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                // Пример для остальных графиков (столбчатый или линейный график)
+                chartType = (metric === 'Капитализация') ? 'line' : 'bar';
+
+                new Chart(ctx, {
+                    type: chartType,
+                    data: {
+                        labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],
+                        datasets: [{
+                            label: company + ' - ' + metric,
+                            data: data,
+                            backgroundColor: metric === 'Капитализация' ? 'rgba(54, 162, 235, 0.2)' : 'rgba(255, 99, 132, 0.2)',
+                            borderColor: metric === 'Капитализация' ? 'rgba(54, 162, 235, 1)' : 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        function calculateRegression(x, y) {
+            var n = x.length;
+            var sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+            for (var i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumXX += x[i] * x[i];
+            }
+            var slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            var intercept = (sumY - slope * sumX) / n;
+            return { slope: slope, intercept: intercept };
+        }
+        
+                // Функция для подготовки данных корреляционной матрицы
+        function prepareCorrelationData(companyData) {
+            var metrics = ['P/S', 'P/BV', 'P/E', 'ROE', 'ROA']; // Список метрик для анализа
+            var data = [];
+            metrics.forEach(function(metric1) {
+                var row = [];
+                metrics.forEach(function(metric2) {
+                    // Вычисление корреляции между двумя метриками
+                    var correlation = calculateCorrelation(companyData, metric1, metric2);
+                    row.push(correlation);
+                });
+                data.push(row);
+            });
+            return data;
+        }
+
+        // Функция для вычисления корреляции между двумя метриками
+        function calculateCorrelation(companyData, metric1, metric2) {
+            var data1 = companyData[metric1];
+            var data2 = companyData[metric2];
+            // Рассчитываем корреляцию, например, с помощью коэффициента Пирсона
+            // В этом примере я использовал простую формулу, в реальных условиях может понадобиться более сложный алгоритм
+            var correlation = 0;
+            for (var i = 0; i < data1.length; i++) {
+                correlation += data1[i] * data2[i];
+            }
+            correlation /= data1.length;
+            return correlation;
+        }
+        
+        
+    </script>
+</body>
+</html>
