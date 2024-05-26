@@ -5,14 +5,14 @@
   <title>Данные для анализа</title>
   <style>
     body {
-      background-color: #222;
+      background-color: #303030;
       color: #fff;
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #333;
+      background-color: #444;
       padding: 10px 0;
       text-align: center;
       margin-bottom: 20px;
@@ -78,6 +78,7 @@
       <option value="GEELY">GEELY</option>
       <option value="NIO">NIO</option>
     </select>
+<!--
     <select id="yearSelect">
       <option value="">Все года</option>
       <option value="2016">2016</option>
@@ -89,6 +90,7 @@
       <option value="2022">2022</option>
       <option value="2023">2023</option>
     </select>
+-->
   </div>
 
   <div class="selected-company" id="selectedCompany"></div>
@@ -270,7 +272,7 @@
 
     function filterData() {
       var company = companySelect.value;
-      var year = yearSelect.value;
+//      var year = yearSelect.value;
       dataTable.innerHTML = '';
       selectedCompany.textContent = company ? `Выбрана компания: ${company}` : 'Все компании';
 
@@ -281,12 +283,12 @@
         var indicators = companyData.slice(1);
         var rowCount = Math.ceil(indicators.length / 9); // Расчет количества строк
 
-        if (!year) {
+
           var companyRow = dataTable.insertRow();
           var cell = companyRow.insertCell(0);
           cell.colSpan = 9;
           cell.textContent = companyName;
-        }
+
 
         for (var i = 0; i < rowCount; i++) {
           var row = dataTable.insertRow();
@@ -320,7 +322,7 @@
     }
 
     companySelect.addEventListener('change', filterData);
-    yearSelect.addEventListener('change', filterData);
+//    yearSelect.addEventListener('change', filterData);
 
     // Отобразить данные по умолчанию
     filterData();
