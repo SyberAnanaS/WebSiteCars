@@ -5,13 +5,20 @@
     <title>Графики</title>
     <style>
         body {
-            background-color: #303030;
-            color: #fff;
+            background-color: #fafafa;
+            color: #303030;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
 
+        header {
+              background-color: #444; /* Темный цвет для шапки */
+              color: #fafafa; /* Светлый текст в шапке */
+              padding: 10px 0;
+              text-align: center;
+              margin-bottom: 20px;
+            }
         h1 {
             text-align: center;
         }
@@ -22,17 +29,17 @@
         }
 
         label, select {
-            color: #fff;
+            color: #222;
             font-size: 18px;
             margin-right: 10px;
         }
 
         select {
-            background-color: #444;
-            border: 1px solid #fff;
+            background-color: #fff;
+            border: 1px solid #222;
             border-radius: 5px;
             padding: 8px;
-            color: #fff;
+            color: #222;
         }
 
         #chartContainer {
@@ -50,27 +57,30 @@
         }
 
         input[type="submit"] {
-            background-color: transparent;
-            border: 2px solid #fff;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: background-color 0.3s ease;
-        }
+    background-color: #fafafa; /* Светлый фон для кнопки */
+    border: 2px solid #303030;
+    color: #303030; /* Темный текст для кнопки */
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
 
-        input[type="submit"]:hover {
-            background-color: #555;
-        }
+input[type="submit"]:hover {
+    background-color: #c9c9c9; /* Цвет кнопки при наведении */
+}
     </style>
 </head>
 <body>
-    <h1>Графики</h1>
+    <header>
+        <h1>Графики</h1>
+    </header>
+    
     <form id="chartForm">
         <label for="company">Выберите компанию:</label>
         <select id="company" name="company">
@@ -91,11 +101,10 @@
             <option value="Регрессия">Регрессия</option>
             <option value="Пузырьковый">Пузырьковый</option>
             <option value="Тепловая карта">Тепловая карта</option>
-<!--            <option value="Спектральный">Спектральный</option>-->
-<!--            <option value="Риск и Доходность">Риск и Доходность</option>-->
         </select>
         <br>
         <input type="submit" value="Показать график">
+        <p>все данные представлены в млрд. долл.</p> 
     </form>
     <div id="chartContainer">
         <canvas id="myChart" width="400" height="400"></canvas>
@@ -123,14 +132,6 @@
                     [-0.2, -0.3, -0.1, 1.0, 0.9],
                     [-0.4, -0.5, -0.3, 0.9, 1.0]
                 ]
-//                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
-//                "Риск и Доходность": [
-//                    { x: 10, y: 5 },
-//                    { x: 15, y: 7 },
-//                    { x: 20, y: 8 },
-//                    { x: 25, y: 9 },
-//                    { x: 30, y: 12 }
-//                ]
             },
             Ford: {
                 Выручка: [151.80, 156.78, 160.34, 155.90, 127.14, 136.34, 158.06, 174.23],
@@ -150,14 +151,6 @@
                     [-0.2, -0.3, -0.1, 1.0, 0.9],
                     [-0.4, -0.5, -0.3, 0.9, 1.0]
                 ]
-//                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
-//                "Риск и Доходность": [
-//                    { x: 10, y: 5 },
-//                    { x: 15, y: 7 },
-//                    { x: 20, y: 8 },
-//                    { x: 25, y: 9 },
-//                    { x: 30, y: 12 }
-//                ]
             },
             Toyota: {
                Выручка: [255.08, 265.12, 272.55, 274.70, 256.60, 279.24, 274.17, 297.96],
@@ -177,14 +170,6 @@
                     [-0.2, -0.3, -0.1, 1.0, 0.9],
                     [-0.4, -0.5, -0.3, 0.9, 1.0]
                 ]
-//                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
-//                "Риск и Доходность": [
-//                    { x: 10, y: 5 },
-//                    { x: 15, y: 7 },
-//                    { x: 20, y: 8 },
-//                    { x: 25, y: 9 },
-//                    { x: 30, y: 12 }
-//                ]
             },
             VG: {
                 Выручка: [217.27, 229.55, 235.85, 252.63, 222.88, 250.20, 279.23, 311.34],
@@ -204,14 +189,6 @@
                     [-0.2, -0.3, -0.1, 1.0, 0.9],
                     [-0.4, -0.5, -0.3, 0.9, 1.0]
                 ]
-//                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
-//                "Риск и Доходность": [
-//                    { x: 10, y: 5 },
-//                    { x: 15, y: 7 },
-//                    { x: 20, y: 8 },
-//                    { x: 25, y: 9 },
-//                    { x: 30, y: 12 }
-//                ]
             },
             GM: {
                 Выручка: [149.18, 145.59, 147.05, 137.24, 122.48, 127.00, 156.74, 171.97],
@@ -231,14 +208,6 @@
                     [-0.2, -0.3, -0.1, 1.0, 0.9],
                     [-0.4, -0.5, -0.3, 0.9, 1.0]
                 ]
-//                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
-//                "Риск и Доходность": [
-//                    { x: 10, y: 5 },
-//                    { x: 15, y: 7 },
-//                    { x: 20, y: 8 },
-//                    { x: 25, y: 9 },
-//                    { x: 30, y: 12 }
-//                ]
             }, 
             GEELY: {
                 Выручка: [62.77, 106.96, 126.26, 110.44, 103.51, 122.46, 172.06, 183.51],
@@ -258,14 +227,6 @@
                     [-0.2, -0.3, -0.1, 1.0, 0.9],
                     [-0.4, -0.5, -0.3, 0.9, 1.0]
                 ]
-//                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45],
-//                "Риск и Доходность": [
-//                    { x: 10, y: 5 },
-//                    { x: 15, y: 7 },
-//                    { x: 20, y: 8 },
-//                    { x: 25, y: 9 },
-//                    { x: 30, y: 12 }
-//                ]
             }, 
             NIO: {
                Выручка: [0.44, 0.71, 0.75, 1.13, 2.36, 5.60, 7.32, 7.70],
@@ -285,14 +246,6 @@
                     [-0.2, -0.3, -0.1, 1.0, 0.9],
                     [-0.4, -0.5, -0.3, 0.9, 1.0]
                 ]
-//                "Спектральный": [10, 15, 20, 25, 30, 35, 40, 45]
-//                "Риск и Доходность": [
-//                    { x: 10, y: 5 },
-//                    { x: 15, y: 7 },
-//                    { x: 20, y: 8 },
-//                    { x: 25, y: 9 },
-//                    { x: 30, y: 12 }
-//                ]
             } 
             // Добавить остальные компании аналогичным образом
         };
@@ -441,39 +394,6 @@
                         }
                     }
                 });
-//            } else if (metric === 'Риск и Доходность') {
-//                // Пример для графика риска и доходности
-//                new Chart(ctx, {
-//                    type: 'scatter',
-//                    data: {
-//                        datasets: [{
-//                            label: company + ' - Риск и Доходность',
-//                            data: data,
-//                            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-//                            borderColor: 'rgba(153, 102, 255, 1)',
-//                            borderWidth: 1
-//                        }]
-//                    },
-//                    options: {
-//                        scales: {
-//                            x: {
-//                                type: 'linear',
-//                                position: 'bottom',
-//                                title: {
-//                                    display: true,
-//                                    text: 'Риск'
-//                                }
-//                            },
-//                            y: {
-//                                beginAtZero: true,
-//                                title: {
-//                                    display: true,
-//                                    text: 'Доходность'
-//                                }
-//                            }
-//                        }
-//                    }
-//                });
             } else {
                 // Пример для остальных графиков (столбчатый или линейный график)
                 chartType = (metric === 'Капитализация') ? 'line' : 'bar';
